@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import WebviewPanel from "./webview";
+import WebviewPanel from "./webView";
 import { AuthProvider } from "./store/authentication";
 
 export function activate(context: vscode.ExtensionContext) {
