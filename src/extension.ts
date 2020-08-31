@@ -20,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
       	  closed
       	  columns(first: 10) {
       		nodes {
+            id
       		  name
       		  cards(first: 50) {
       			nodes {
@@ -38,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
         description: project.body,
         label: "",
         lanes: project.columns.nodes.map((column: any) => ({
+          id: column.id,
           title: column.name,
           label: "",
           cards: column.cards.nodes.map((card: any) => ({
