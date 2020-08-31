@@ -4,6 +4,8 @@ import * as path from "path";
 class WebviewPanel {
   panel: vscode.WebviewPanel;
 
+  onLaneAdded: any;
+
   constructor(context: vscode.ExtensionContext, private board: any) {
     const buildPath = path.join(context.extensionPath, "webview", "build");
     this.panel = vscode.window.createWebviewPanel(

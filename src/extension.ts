@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import WebviewPanel from "./webView";
 import { AuthProvider } from "./store/authentication";
+import { addProjectColumn } from "./store/actions";
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new AuthProvider();
@@ -35,6 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
       }`);
       // @ts-ignore
       const projects = data.viewer.projects.nodes.map((project: any) => ({
+        id: project.id,
         title: project.name,
         description: project.body,
         label: "",
@@ -68,7 +70,11 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // @ts-ignore
-      new WebviewPanel(context, response.project);
+      const panel = new WebviewPanel(context, response.project);
+      panel.onLaneAdded = (title: string) => {
+        // @ts-ignore
+        addProjectColumn(octokit, response.project.id, title);
+      };
     })
   );
 }
