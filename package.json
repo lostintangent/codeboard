@@ -22,7 +22,8 @@
     "commands": [
       {
         "command": "extension.openCodeboard",
-        "title": "Codeboard: Open"
+        "title": "Open Board",
+        "category": "Codeboard"
       }
     ]
   },
