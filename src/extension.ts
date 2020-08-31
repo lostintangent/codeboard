@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import WebviewPanel from "./webView";
 import { AuthProvider } from "./store/authentication";
-import { addProjectColumn } from "./store/actions";
+import { addProjectColumn, deleteProjectColumn } from "./store/actions";
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new AuthProvider();
@@ -58,7 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
         };
       });
 
-      const response = await vscode.window.showQuickPick(
+      const response: any = await vscode.window.showQuickPick(
         projectItems as vscode.QuickPickItem[],
         {
           placeHolder: "Select the project board to open",
@@ -69,12 +69,13 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      // @ts-ignore
       const panel = new WebviewPanel(context, response.project);
-      panel.onLaneAdded = (title: string) => {
-        // @ts-ignore
+
+      panel.onLaneAdded = (title: string) =>
         addProjectColumn(octokit, response.project.id, title);
-      };
+
+      panel.onLaneRemoved = (columnId: string) =>
+        deleteProjectColumn(octokit, columnId);
     })
   );
 }
