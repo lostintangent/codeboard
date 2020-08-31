@@ -3,8 +3,8 @@ import * as path from "path";
 
 class WebviewPanel {
   panel: vscode.WebviewPanel;
-
   onLaneAdded: any;
+  onLaneRemoved: any;
 
   constructor(context: vscode.ExtensionContext, private board: any) {
     const buildPath = path.join(context.extensionPath, "webview", "build");
@@ -40,6 +40,12 @@ class WebviewPanel {
         break;
       case "data_changed":
         console.log(message.data);
+        break;
+      case "lane_added":
+        this.onLaneAdded && this.onLaneAdded(message.title);
+        break;
+      case "lane_deleted":
+        this.onLaneRemoved && this.onLaneRemoved(message.id);
         break;
     }
   }

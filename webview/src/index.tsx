@@ -16,6 +16,7 @@ class App extends React.Component {
       data: { status: "ready" },
     });
     window.addEventListener("message", (event) => {
+      console.log("Message received", event.data);
       this.setState({ data: event.data });
     });
   }
@@ -31,8 +32,15 @@ class App extends React.Component {
     return (
       <Board
         data={this.state.data}
+        editable
         draggable
-        onDataChange={this.onDataChange}
+        canAddLanes
+        onLaneAdd={({ title }) =>
+          vscode.postMessage({ type: "lane_added", title })
+        }
+        onLaneDelete={(laneId) =>
+          vscode.postMessage({ type: "lane_deleted", id: laneId })
+        }
         components={{ Card: MarkdownCard }}
       />
     );

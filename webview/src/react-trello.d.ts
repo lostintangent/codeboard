@@ -187,6 +187,9 @@ declare module ReactTrello {
     tagStyle?: object;
     addLaneTitle?: string;
     addCardTitle?: string;
+    canAddLanes?: boolean;
+    onLaneAdd?: any;
+    onLaneDelete?: any;
   }
 }
 
