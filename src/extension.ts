@@ -8,14 +8,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.openCodeboard", async () => {
-      new WebviewPanel(context);
       const octokit = await provider.getOctokit();
-      const {
-        viewer: { projects },
-      } = await octokit(`{
+      const data = await octokit(`{
       viewer {
         projects(first: 100) {
       	nodes {
+          id
+          name
       	  body
       	  bodyHTML
       	  closed
@@ -33,7 +32,41 @@ export function activate(context: vscode.ExtensionContext) {
         }
       }
       }`);
-      console.log(projects);
+      // @ts-ignore
+      const projects = data.viewer.projects.nodes.map((project: any) => ({
+        title: project.name,
+        description: project.body,
+        label: "",
+        lanes: project.columns.nodes.map((column: any) => ({
+          title: column.name,
+          label: "",
+          cards: column.cards.nodes.map((card: any) => ({
+            note: card.note,
+          })),
+        })),
+      }));
+
+      const projectItems = projects.map((project: any) => {
+        return {
+          label: `$(project) ${project.title}`,
+          description: project.description,
+          project,
+        };
+      });
+
+      const response = await vscode.window.showQuickPick(
+        projectItems as vscode.QuickPickItem[],
+        {
+          placeHolder: "Select the project board to open",
+        }
+      );
+
+      if (!response) {
+        return;
+      }
+
+      // @ts-ignore
+      new WebviewPanel(context, response.project);
     })
   );
 }

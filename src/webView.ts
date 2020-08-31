@@ -1,42 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-const initialData = {
-  lanes: [
-    {
-      id: "lane1",
-      title: "Planned Tasks",
-      label: "2/2",
-      cards: [
-        {
-          id: "Card1",
-          title: "Write Blog",
-          description: "Can AI make memes",
-          label: "30 mins",
-          draggable: false,
-        },
-        {
-          id: "Card2",
-          title: "Pay Rent",
-          description: "Transfer via NEFT",
-          label: "5 mins",
-          metadata: { sha: "be312a1" },
-        },
-      ],
-    },
-    {
-      id: "lane2",
-      title: "Completed",
-      label: "0/0",
-      cards: [],
-    },
-  ],
-};
-
 class WebviewPanel {
   panel: vscode.WebviewPanel;
 
-  constructor(context: vscode.ExtensionContext) {
+  constructor(context: vscode.ExtensionContext, private board: any) {
     const buildPath = path.join(context.extensionPath, "webview", "build");
     this.panel = vscode.window.createWebviewPanel(
       "codeboardPanel",
@@ -47,6 +15,7 @@ class WebviewPanel {
         localResourceRoots: [vscode.Uri.file(buildPath)],
       }
     );
+
     this.panel.webview.html = getWebviewContent(buildPath);
 
     this.panel.webview.onDidReceiveMessage(
@@ -64,7 +33,7 @@ class WebviewPanel {
     switch (message.type) {
       case "webview_status":
         if (message.data.status === "ready") {
-          this.sendUpdate(initialData);
+          this.sendUpdate(this.board);
         }
         break;
       case "data_changed":
