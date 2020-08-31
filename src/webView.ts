@@ -1,10 +1,44 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
+const initialData = {
+  lanes: [
+    {
+      id: "lane1",
+      title: "Planned Tasks",
+      label: "2/2",
+      cards: [
+        {
+          id: "Card1",
+          title: "Write Blog",
+          description: "Can AI make memes",
+          label: "30 mins",
+          draggable: false,
+        },
+        {
+          id: "Card2",
+          title: "Pay Rent",
+          description: "Transfer via NEFT",
+          label: "5 mins",
+          metadata: { sha: "be312a1" },
+        },
+      ],
+    },
+    {
+      id: "lane2",
+      title: "Completed",
+      label: "0/0",
+      cards: [],
+    },
+  ],
+};
+
 class WebviewPanel {
+  panel: vscode.WebviewPanel;
+
   constructor(context: vscode.ExtensionContext) {
     const buildPath = path.join(context.extensionPath, "webview", "build");
-    const panel = vscode.window.createWebviewPanel(
+    this.panel = vscode.window.createWebviewPanel(
       "codeboardPanel",
       "Codeboard",
       vscode.ViewColumn.One,
@@ -13,7 +47,30 @@ class WebviewPanel {
         localResourceRoots: [vscode.Uri.file(buildPath)],
       }
     );
-    panel.webview.html = getWebviewContent(buildPath);
+    this.panel.webview.html = getWebviewContent(buildPath);
+
+    this.panel.webview.onDidReceiveMessage(
+      (message) => this.onMessageFromWebview(message),
+      undefined,
+      context.subscriptions
+    );
+  }
+
+  public sendUpdate(data: any) {
+    this.panel.webview.postMessage(data);
+  }
+
+  onMessageFromWebview(message: any) {
+    switch (message.type) {
+      case "webview_status":
+        if (message.data.status === "ready") {
+          this.sendUpdate(initialData);
+        }
+        break;
+      case "data_changed":
+        console.log(message.data);
+        break;
+    }
   }
 }
 
