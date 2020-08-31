@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Board from "react-trello";
-import MarkdownCard from "./Card";
+import MarkdownCard from "./MarkdownCard";
 import "./index.css";
 
 declare var acquireVsCodeApi: any;

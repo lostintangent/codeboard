@@ -9,18 +9,10 @@ const initialData = {
       label: "2/2",
       cards: [
         {
-          id: "Card1",
-          title: "Write Blog",
-          description: "Can AI make memes",
-          label: "30 mins",
-          draggable: false,
+          note: "**Write Blog**\n\nCan AI make memes",
         },
         {
-          id: "Card2",
-          title: "Pay Rent",
-          description: "Transfer via NEFT",
-          label: "5 mins",
-          metadata: { sha: "be312a1" },
+          note: "**Pay Rent**\n\nTransfer via NEFT",
         },
       ],
     },
