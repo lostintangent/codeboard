@@ -1,5 +1,5 @@
 // from https://gist.github.com/rlingineni/fc95c05897ffc6d7e78fbbc6255dbaa0
-// also see
+// custom additions by Arjun at the end
 
 declare class ReactTrelloBoard<CardMetaData> extends React.Component<
   ReactTrello.BoardProps<CardMetaData>
@@ -192,4 +192,7 @@ declare module ReactTrello {
 
 declare module "react-trello" {
   export default ReactTrelloBoard;
+
+  // custom additions
+  export declare var components: any;
 }

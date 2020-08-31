@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Board from "react-trello";
+import MarkdownCard from "./Card";
 import "./index.css";
 
 declare var acquireVsCodeApi: any;
@@ -32,6 +33,7 @@ class App extends React.Component {
         data={this.state.data}
         draggable
         onDataChange={this.onDataChange}
+        components={{ Card: MarkdownCard }}
       />
     );
   }
