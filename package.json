@@ -32,7 +32,7 @@
     "build:extension": "tsc -p ./",
     "build:webview": "cd webview && npm run build",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "postinstall": "node ./node_modules/vscode/bin/install && cd webview && npm install"
   },
   "devDependencies": {
     "typescript": "^3.1.4",
