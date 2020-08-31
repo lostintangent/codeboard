@@ -5,6 +5,7 @@ class WebviewPanel {
   panel: vscode.WebviewPanel;
 
   onLaneAdded: any;
+  onLaneRemoved: any;
 
   constructor(context: vscode.ExtensionContext, private board: any) {
     const buildPath = path.join(context.extensionPath, "webview", "build");

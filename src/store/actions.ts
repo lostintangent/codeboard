@@ -17,3 +17,17 @@ export async function addProjectColumn(
     }
   );
 }
+
+export async function deleteProjectColumn(octoKit: graphql, columnId: string) {
+  await octoKit(
+    `mutation deleteProjectColumn($columnId: ID!) {
+      deleteProjectColumn(input: {columnId: $columnId}) {
+        clientMutationId
+      }
+    }
+    `,
+    {
+      columnId,
+    }
+  );
+}
