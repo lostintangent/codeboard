@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Board from "react-trello";
-import MarkdownCard from "./MarkdownCard";
+import { MarkdownCard, MarkdownEditableCard } from "./MarkdownCard";
 import "./index.css";
 
 declare var acquireVsCodeApi: any;
@@ -49,15 +49,22 @@ class App extends React.Component {
             title: data.title,
           })
         }
-        handleLaneDragEnd={(oldPosition, newPosition, payload) => {
+        handleLaneDragEnd={(oldPosition, newPosition, payload) =>
           vscode.postMessage({
             type: "lane_moved",
             id: payload.id,
             oldPosition,
             newPosition,
-          });
-        }}
-        components={{ Card: MarkdownCard }}
+          })
+        }
+        onCardAdd={(card: any, laneId) =>
+          vscode.postMessage({
+            type: "card_added",
+            note: card.note,
+            laneId,
+          })
+        }
+        components={{ Card: MarkdownCard, NewCardForm: MarkdownEditableCard }}
       />
     );
   }

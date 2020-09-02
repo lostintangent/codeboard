@@ -200,4 +200,5 @@ declare module "react-trello" {
 
   // custom additions
   export declare var components: any;
+  export declare var widgets: any;
 }

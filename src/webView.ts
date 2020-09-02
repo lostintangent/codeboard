@@ -55,6 +55,9 @@ class WebviewPanel {
       case "lane_moved":
         this.onLaneMoved && this.onLaneMoved(message.id, message.newPosition);
         break;
+      case "card_added":
+        console.log("Card added", message.note, message.laneId);
+        break;
     }
   }
 }

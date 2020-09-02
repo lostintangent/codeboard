@@ -1,5 +1,5 @@
 import React from "react";
-import { components } from "react-trello";
+import { components, widgets } from "react-trello";
 import styled from "styled-components";
 import ReactMarkdown from "react-markdown";
 
@@ -26,8 +26,40 @@ const Detail = styled.div`
   color: #4d4d4d;
   white-space: pre-wrap;
 `;
+const CardForm = styled.div`
+  background-color: #e3e3e3;
+`;
+const AddButton = styled.button`
+  background: #5aac44;
+  color: #fff;
+  transition: background 0.3s ease;
+  min-height: 32px;
+  padding: 4px 16px;
+  vertical-align: top;
+  margin-top: 0;
+  margin-right: 8px;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 0;
+`;
+const CancelButton = styled.button`
+  background: #999999;
+  color: #fff;
+  transition: background 0.3s ease;
+  min-height: 32px;
+  padding: 4px 16px;
+  vertical-align: top;
+  margin-top: 0;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 0;
+`;
 
-class MarkdownCard extends components.Card {
+export class MarkdownCard extends components.Card {
   render() {
     return (
       <MovableCardWrapper>
@@ -38,4 +70,23 @@ class MarkdownCard extends components.Card {
     );
   }
 }
-export default MarkdownCard;
+
+export class MarkdownEditableCard extends components.NewCardForm {
+  render() {
+    const { onCancel, t } = this.props;
+    return (
+      <CardForm>
+        <CardWrapper>
+          <Detail>
+            <widgets.EditableLabel
+              placeholder={t("placeholder.note")}
+              onChange={(val) => this.updateField("note", val)}
+            />
+          </Detail>
+        </CardWrapper>
+        <AddButton onClick={this.handleAdd}>{t("button.Add card")}</AddButton>
+        <CancelButton onClick={onCancel}>{t("button.Cancel")}</CancelButton>
+      </CardForm>
+    );
+  }
+}
