@@ -79,8 +79,9 @@ export class MarkdownEditableCard extends components.NewCardForm {
         <CardWrapper>
           <Detail>
             <widgets.EditableLabel
-              placeholder={t("placeholder.note")}
+              placeholder={"Note"}
               onChange={(val) => this.updateField("note", val)}
+              autoFocus
             />
           </Detail>
         </CardWrapper>
