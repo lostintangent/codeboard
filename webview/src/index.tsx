@@ -35,12 +35,28 @@ class App extends React.Component {
         editable
         draggable
         canAddLanes
+        editLaneTitle
         onLaneAdd={({ title }) =>
           vscode.postMessage({ type: "lane_added", title })
         }
         onLaneDelete={(laneId) =>
           vscode.postMessage({ type: "lane_deleted", id: laneId })
         }
+        onLaneUpdate={(laneId, data) =>
+          vscode.postMessage({
+            type: "lane_updated",
+            id: laneId,
+            title: data.title,
+          })
+        }
+        handleLaneDragEnd={(oldPosition, newPosition, payload) => {
+          vscode.postMessage({
+            type: "lane_moved",
+            id: payload.id,
+            oldPosition,
+            newPosition,
+          });
+        }}
         components={{ Card: MarkdownCard }}
       />
     );

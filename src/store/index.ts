@@ -1,24 +1,28 @@
 import { observable } from "mobx";
 
 interface BoardCard {
-  contents: string;
+  id: string;
+  note: string;
 }
 
 interface BoardColumn {
+  id: string;
+  title: string;
   cards: BoardCard[];
 }
 
 interface Board {
+  id: string;
   title: string;
-  columns: BoardColumn[];
+  lanes: BoardColumn[];
 }
 
 interface Store {
   isSignedIn: boolean;
-  boards: Board[];
+  board: Board | undefined;
 }
 
 export const store: Store = observable({
   isSignedIn: false,
-  boards: [],
+  board: undefined,
 });

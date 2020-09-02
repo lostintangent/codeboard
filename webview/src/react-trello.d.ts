@@ -88,7 +88,7 @@ declare module ReactTrello {
     /**
      * Callback function triggered when lane drag ends: handleLaneDragEnd(laneId, newPosition)
      */
-    handleLaneDragEnd?: (laneId: string, newPosition: number) => void;
+    handleLaneDragEnd?: any;
     /**
      * CSS class to be applied to Card when being dragged
      */
@@ -188,8 +188,10 @@ declare module ReactTrello {
     addLaneTitle?: string;
     addCardTitle?: string;
     canAddLanes?: boolean;
+    editLaneTitle?: boolean;
     onLaneAdd?: any;
     onLaneDelete?: any;
+    onLaneUpdate?: any;
   }
 }
 

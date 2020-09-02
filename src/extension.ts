@@ -1,7 +1,14 @@
 import * as vscode from "vscode";
 import WebviewPanel from "./webView";
 import { AuthProvider } from "./store/authentication";
-import { addProjectColumn, deleteProjectColumn } from "./store/actions";
+import {
+  addProjectColumn,
+  deleteProjectColumn,
+  moveProjectColumn,
+  updateProjectColumn,
+} from "./store/actions";
+import { store } from "./store";
+import { reaction } from "mobx";
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new AuthProvider();
@@ -35,20 +42,22 @@ export function activate(context: vscode.ExtensionContext) {
       }
       }`);
       // @ts-ignore
-      const projects = data.viewer.projects.nodes.map((project: any) => ({
-        id: project.id,
-        title: project.name,
-        description: project.body,
-        label: "",
-        lanes: project.columns.nodes.map((column: any) => ({
-          id: column.id,
-          title: column.name,
+      const projects: Board[] = data.viewer.projects.nodes.map(
+        (project: any) => ({
+          id: project.id,
+          title: project.name,
+          description: project.body,
           label: "",
-          cards: column.cards.nodes.map((card: any) => ({
-            note: card.note,
+          lanes: project.columns.nodes.map((column: any) => ({
+            id: column.id,
+            title: column.name,
+            label: "",
+            cards: column.cards.nodes.map((card: any) => ({
+              note: card.note,
+            })),
           })),
-        })),
-      }));
+        })
+      );
 
       const projectItems = projects.map((project: any) => {
         return {
@@ -69,13 +78,34 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      store.board = response.project;
+
       const panel = new WebviewPanel(context, response.project);
 
       panel.onLaneAdded = (title: string) =>
         addProjectColumn(octokit, response.project.id, title);
 
+      panel.onLaneUpdated = (columnId: string, title: string) =>
+        updateProjectColumn(octokit, columnId, title);
+
       panel.onLaneRemoved = (columnId: string) =>
         deleteProjectColumn(octokit, columnId);
+
+      panel.onLaneMoved = (columnId: string, newPosition: number) =>
+        moveProjectColumn(octokit, columnId, newPosition);
+
+      reaction(
+        () =>
+          store.board
+            ? store.board.lanes.map((column) => [
+                column.title,
+                column.cards.map((card) => [card.note]),
+              ])
+            : null,
+        () => {
+          panel.sendUpdate(store.board);
+        }
+      );
     })
   );
 }
