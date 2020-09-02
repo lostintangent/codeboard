@@ -58,6 +58,18 @@ class WebviewPanel {
       case "card_added":
         console.log("Card added", message.note, message.laneId);
         break;
+      case "card_deleted":
+        console.log("Card deleted", message.id, message.laneId);
+        break;
+      case "card_moved":
+        console.log(
+          "Card moved",
+          message.id,
+          message.oldLaneId,
+          message.newLaneId,
+          message.newPosition
+        );
+        break;
     }
   }
 }

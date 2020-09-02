@@ -32,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
       		  name
       		  cards(first: 50) {
       			nodes {
+              id
       			  note
       			}
       		  }
@@ -53,6 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
             title: column.name,
             label: "",
             cards: column.cards.nodes.map((card: any) => ({
+              id: card.id,
               note: card.note,
             })),
           })),

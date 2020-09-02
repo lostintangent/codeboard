@@ -64,6 +64,22 @@ class App extends React.Component {
             laneId,
           })
         }
+        onCardDelete={(cardId, laneId) => {
+          vscode.postMessage({
+            type: "card_deleted",
+            id: cardId,
+            laneId,
+          });
+        }}
+        handleDragEnd={(id, oldLaneId, newLaneId, newPosition, card) => {
+          vscode.postMessage({
+            type: "card_moved",
+            id,
+            oldLaneId,
+            newLaneId,
+            newPosition,
+          });
+        }}
         components={{ Card: MarkdownCard, NewCardForm: MarkdownEditableCard }}
       />
     );

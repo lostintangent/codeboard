@@ -2,8 +2,19 @@ import React from "react";
 import { components, widgets } from "react-trello";
 import styled from "styled-components";
 import ReactMarkdown from "react-markdown";
+import EditableLabel from "./Input";
 
-// lifted from https://github.com/rcdexta/react-trello/blob/master/src/styles/Base.js
+// Copied from https://github.com/rcdexta/react-trello/blob/master/src/styles/Base.js
+export const Header = styled.header`
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+`;
+export const CardHeader = styled(Header)`
+  padding-bottom: 6px;
+  color: #000;
+`;
 const CardWrapper = styled.article`
   border-radius: 3px;
   border-bottom: 1px solid #ccc;
@@ -61,8 +72,12 @@ const CancelButton = styled.button`
 
 export class MarkdownCard extends components.Card {
   render() {
+    const { id, showDeleteButton } = this.props;
     return (
-      <MovableCardWrapper>
+      <MovableCardWrapper data-id={id}>
+        <CardHeader>
+          {showDeleteButton && <button onClick={this.onDelete}>x</button>}
+        </CardHeader>
         <Detail>
           <ReactMarkdown source={this.props.note} />
         </Detail>
@@ -72,13 +87,24 @@ export class MarkdownCard extends components.Card {
 }
 
 export class MarkdownEditableCard extends components.NewCardForm {
+  state = {
+    note: "",
+  };
+  onChange(value) {
+    this.setState({ note: value });
+  }
+  handleAdd = () => {
+    this.props.onAdd(this.state);
+  };
   render() {
     const { onCancel, t } = this.props;
     return (
       <CardForm>
         <CardWrapper>
           <Detail>
-            <widgets.EditableLabel
+            <EditableLabel
+              value={""}
+              inline={false}
               placeholder={"Note"}
               onChange={(val) => this.updateField("note", val)}
               autoFocus
